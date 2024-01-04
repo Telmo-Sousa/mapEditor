@@ -16,6 +16,10 @@ mapEditor allows the user(s) to paint a grid with a cursor to their liking. The 
 - **r:** Cycle colors
 - **u:** Clean all 
 
+## Image
+
+![Screenshot](resources/screenshot.png)
+
 ## Usage
 
 1. Clone the repository.
