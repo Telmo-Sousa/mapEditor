@@ -32,7 +32,7 @@ mapEditor allows the user(s) to paint a grid with a cursor to their liking. The 
 ## Snippet of code
 
 ```java
-    private void initCursor() {
+    private void createCursor() {
         cursorRectangle = new Rectangle(PADDING, PADDING, customWidth, customHeight);
         cursorRectangle.setColor(CURSOR_COLOR);
         cursorRectangle.draw();

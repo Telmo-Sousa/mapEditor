@@ -2,6 +2,7 @@ package org.codeforall.ooptimus;
 
 import org.academiadecodigo.simplegraphics.graphics.Rectangle;
 import org.academiadecodigo.simplegraphics.graphics.Color;
+import org.academiadecodigo.simplegraphics.graphics.Text;
 import org.academiadecodigo.simplegraphics.keyboard.*;
 
 import java.util.ArrayList;
@@ -10,7 +11,6 @@ import java.util.List;
 public class EventHandler implements KeyboardHandler, Grid {
 
     private static final int PADDING = 10;
-    private static final int MIN_SIZE = 50;
     private static final Color CURSOR_COLOR = Color.DARK_GRAY;
     private static final Color[] RECTANGLE_COLORS = {Color.BLACK, Color.RED, Color.GREEN, Color.BLUE};
     private int colorIndex = 0;
@@ -42,6 +42,33 @@ public class EventHandler implements KeyboardHandler, Grid {
                 rectangle.setColor(RECTANGLE_COLORS[colorIndex]);
                 rectangle.draw();
             }
+        }
+
+        int keyInfoStartY = startY + rows * customHeight + PADDING * 2;
+        int textSpacing = 25;
+        int keyRectangleHeight = textSpacing + PADDING * 2;
+
+        String[] keyInfo = {
+                "Keybinds:",
+                "- h: Move cursor left",
+                "- j: Move cursor down",
+                "- k: Move cursor up",
+                "- l: Move cursor right",
+                "- i: Paint",
+                "- r: Cycle colors",
+                "- u: Clean all"
+        };
+
+        for (int i = 0; i < keyInfo.length; i++) {
+            Rectangle keyRectangle = new Rectangle(startX, keyInfoStartY + i * keyRectangleHeight, cols * customWidth, keyRectangleHeight);
+            keyRectangle.setColor(Color.WHITE);
+            keyRectangle.draw();
+            keyRectangle.fill();
+
+            Text keyText = new Text(startX + PADDING, keyInfoStartY + i * keyRectangleHeight + PADDING, keyInfo[i]);
+            keyText.setColor(Color.BLACK);
+            keyText.draw();
+            keyText.grow(3, 3);
         }
     }
 
@@ -106,11 +133,6 @@ public class EventHandler implements KeyboardHandler, Grid {
         }
     }
 
-    private boolean isValidMove(int dx, int dy) {
-        return cursorRectangle.getX() + dx >= PADDING && cursorRectangle.getX() + dx + cursorRectangle.getWidth() <= PADDING + cols * MIN_SIZE &&
-                cursorRectangle.getY() + dy >= PADDING && cursorRectangle.getY() + dy + cursorRectangle.getHeight() <= PADDING + rows * MIN_SIZE;
-    }
-
     private void drawNewRectangle() {
         Rectangle newRectangle = new Rectangle(cursorRectangle.getX(), cursorRectangle.getY(), cursorRectangle.getWidth(), cursorRectangle.getHeight());
         newRectangle.setColor(RECTANGLE_COLORS[colorIndex]);
@@ -135,8 +157,10 @@ public class EventHandler implements KeyboardHandler, Grid {
     }
 
     @Override
-    public void keyReleased(KeyboardEvent event) {}
+    public void keyReleased(KeyboardEvent event) {
+    }
 
     @Override
-    public void init() {}
+    public void init() {
+    }
 }
