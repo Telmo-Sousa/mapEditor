@@ -13,6 +13,7 @@ mapEditor allows the user(s) to paint a grid with a cursor to their liking. The 
 - **k:** Move cursor up
 - **l:** Move cursor right
 - **i:** Paint
+- **r:** Cycle colors
 - **u:** Clean all 
 
 ## Usage
@@ -31,8 +32,10 @@ mapEditor allows the user(s) to paint a grid with a cursor to their liking. The 
 ## Snippet of code
 
 ```java
-cursorRectangle = new Rectangle(PADDING, PADDING, customMiniWidth, customMiniHeight);
-        cursorRectangle.setColor(Color.DARK_GRAY);
+    private void initCursor() {
+        cursorRectangle = new Rectangle(PADDING, PADDING, customWidth, customHeight);
+        cursorRectangle.setColor(CURSOR_COLOR);
         cursorRectangle.draw();
         cursorRectangle.fill();
+        }
 ```
