@@ -1,8 +1,6 @@
 package org.codeforall.ooptimus;
 
-import org.academiadecodigo.simplegraphics.graphics.Rectangle;
-import org.academiadecodigo.simplegraphics.graphics.Color;
-import org.academiadecodigo.simplegraphics.graphics.Text;
+import org.academiadecodigo.simplegraphics.graphics.*;
 import org.academiadecodigo.simplegraphics.keyboard.*;
 
 import java.util.ArrayList;
@@ -14,8 +12,9 @@ public class EventHandler implements KeyboardHandler, Grid {
     private static final Color CURSOR_COLOR = Color.DARK_GRAY;
     private static final Color[] RECTANGLE_COLORS = {Color.BLACK, Color.RED, Color.GREEN, Color.BLUE};
     private int colorIndex = 0;
-
     private int cols, rows, customWidth, customHeight;
+    private int startX = PADDING;
+    private int startY = PADDING;
     private Rectangle cursorRectangle;
     private List<Rectangle> newRectangles = new ArrayList<>();
 
@@ -33,9 +32,6 @@ public class EventHandler implements KeyboardHandler, Grid {
     }
 
     private void createGrid() {
-        int startX = PADDING;
-        int startY = PADDING;
-
         for (int row = 0; row < rows; row++) {
             for (int col = 0; col < cols; col++) {
                 Rectangle rectangle = new Rectangle(startX + col * customWidth, startY + row * customHeight, customWidth, customHeight);
@@ -43,7 +39,10 @@ public class EventHandler implements KeyboardHandler, Grid {
                 rectangle.draw();
             }
         }
+        displayKeybinds();
+    }
 
+    private void displayKeybinds() {
         int keyInfoStartY = startY + rows * customHeight + PADDING * 2;
         int textSpacing = 25;
         int keyRectangleHeight = textSpacing + PADDING * 2;
@@ -62,7 +61,6 @@ public class EventHandler implements KeyboardHandler, Grid {
         for (int i = 0; i < keyInfo.length; i++) {
             Rectangle keyRectangle = new Rectangle(startX, keyInfoStartY + i * keyRectangleHeight, cols * customWidth, keyRectangleHeight);
             keyRectangle.setColor(Color.WHITE);
-            keyRectangle.draw();
             keyRectangle.fill();
 
             Text keyText = new Text(startX + PADDING, keyInfoStartY + i * keyRectangleHeight + PADDING, keyInfo[i]);
@@ -75,7 +73,6 @@ public class EventHandler implements KeyboardHandler, Grid {
     private void createCursor() {
         cursorRectangle = new Rectangle(PADDING, PADDING, customWidth, customHeight);
         cursorRectangle.setColor(CURSOR_COLOR);
-        cursorRectangle.draw();
         cursorRectangle.fill();
     }
 
@@ -94,27 +91,13 @@ public class EventHandler implements KeyboardHandler, Grid {
     public void keyPressed(KeyboardEvent event) {
         int moveDistance = customWidth;
         switch (event.getKey()) {
-            case KeyboardEvent.KEY_H:
-                moveCursor(-moveDistance, 0);
-                break;
-            case KeyboardEvent.KEY_J:
-                moveCursor(0, moveDistance);
-                break;
-            case KeyboardEvent.KEY_K:
-                moveCursor(0, -moveDistance);
-                break;
-            case KeyboardEvent.KEY_L:
-                moveCursor(moveDistance, 0);
-                break;
-            case KeyboardEvent.KEY_I:
-                drawNewRectangle();
-                break;
-            case KeyboardEvent.KEY_U:
-                cleanNewRectangles();
-                break;
-            case KeyboardEvent.KEY_R:
-                changeRectangleColor();
-                break;
+            case KeyboardEvent.KEY_H -> moveCursor(-moveDistance, 0);
+            case KeyboardEvent.KEY_J -> moveCursor(0, moveDistance);
+            case KeyboardEvent.KEY_K -> moveCursor(0, -moveDistance);
+            case KeyboardEvent.KEY_L -> moveCursor(moveDistance, 0);
+            case KeyboardEvent.KEY_I -> drawNewRectangle();
+            case KeyboardEvent.KEY_U -> cleanNewRectangles();
+            case KeyboardEvent.KEY_R -> changeRectangleColor();
         }
     }
 
@@ -127,16 +110,19 @@ public class EventHandler implements KeyboardHandler, Grid {
         int newPosX = cursorRectangle.getX() + dx;
         int newPosY = cursorRectangle.getY() + dy;
 
-        if (newPosX >= PADDING && newPosX + cursorRectangle.getWidth() <= PADDING + cols * customWidth &&
-                newPosY >= PADDING && newPosY + cursorRectangle.getHeight() <= PADDING + rows * customHeight) {
+        if (isValidCursorPosition(newPosX, newPosY)) {
             cursorRectangle.translate(dx, dy);
         }
+    }
+
+    private boolean isValidCursorPosition(int x, int y) {
+        return x >= PADDING && x + cursorRectangle.getWidth() <= PADDING + cols * customWidth &&
+                y >= PADDING && y + cursorRectangle.getHeight() <= PADDING + rows * customHeight;
     }
 
     private void drawNewRectangle() {
         Rectangle newRectangle = new Rectangle(cursorRectangle.getX(), cursorRectangle.getY(), cursorRectangle.getWidth(), cursorRectangle.getHeight());
         newRectangle.setColor(RECTANGLE_COLORS[colorIndex]);
-        newRectangle.draw();
         newRectangle.fill();
         newRectangles.add(newRectangle);
 
@@ -145,14 +131,11 @@ public class EventHandler implements KeyboardHandler, Grid {
 
     private void refreshCursor() {
         cursorRectangle.delete();
-        cursorRectangle.draw();
         cursorRectangle.fill();
     }
 
     private void cleanNewRectangles() {
-        for (Rectangle rect : newRectangles) {
-            rect.delete();
-        }
+        newRectangles.forEach(Rectangle::delete);
         newRectangles.clear();
     }
 
