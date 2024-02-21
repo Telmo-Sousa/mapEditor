@@ -6,7 +6,9 @@ The EventHandler class initializes the grid with a specified number of columns a
 <br>
 The program uses a List to keep track of any new blocks that have been added to the grid, and refreshes the grid display whenever a new block is added or an existing block is deleted. The grid display is created using a nested loop that iterates through each cell in the grid and draws a rectangle with a specified color.
 <br>
-The program also displays a set of keybinds at the bottom of the screen, which can be used as a reference for the user. Overall, this program provides a simple and intuitive interface for creating and editing a grid of colored blocks.
+The program also displays a set of keybinds at the bottom of the screen, which can be used as a reference for the user.
+<br>
+Overall, this program provides a simple and intuitive interface for creating and editing a grid of colored blocks.
 
 ## Keybinds 
 
